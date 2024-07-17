@@ -1,8 +1,13 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextRequest, NextResponse } from 'next/server';
 import axios from 'axios';
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { code } = req.query;
+export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const code = searchParams.get('code');
+
+  if (!code) {
+    return NextResponse.json({ error: 'No code provided' }, { status: 400 });
+  }
 
   try {
     // Trocar o código pelo token de acesso
@@ -27,11 +32,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       },
     });
 
-    res.status(200).json(userResponse.data);
+    return NextResponse.json(userResponse.data);
   } catch (error) {
     console.error('Erro na autenticação do Instagram:', error);
-    res.status(500).json({ error: 'Erro na autenticação do Instagram' });
+    return NextResponse.json({ error: 'Erro na autenticação do Instagram' }, { status: 500 });
   }
-};
-
-export default handler;
+}
