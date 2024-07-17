@@ -2,7 +2,7 @@
 
 import React from "react";
 
-const InstagramAuth = () => {
+export default function InstagramAuth() {
   const instagramAuthUrl = `https://api.instagram.com/oauth/authorize?client_id=${process.env.NEXT_PUBLIC_INSTAGRAM_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_INSTAGRAM_REDIRECT_URI}&scope=user_profile&response_type=code&version=${process.env.INSTAGRAM_API_VERSION}`;
 
   return (
@@ -11,6 +11,4 @@ const InstagramAuth = () => {
       <a href={instagramAuthUrl}>Login with Instagram</a>
     </div>
   );
-};
-
-export default InstagramAuth;
+}
