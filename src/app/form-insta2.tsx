@@ -33,7 +33,7 @@ export default function InstagramAuth2() {
       const response = await axios.get("/api/get", {
         params: { accessToken },
       });
-      setUserData(response.data);
+      return setUserData(response.data);
     } catch (error) {
       console.error("Erro ao obter os dados do usuário:", error);
     }
@@ -54,9 +54,11 @@ export default function InstagramAuth2() {
 
   return (
     <div>
-      <h1>Instagram Auth</h1>
       {!userData ? (
-        <a href={AUTH_URL}>Login with Instagram</a>
+        <>
+          <h1>Instagram Auth</h1>
+          <a href={AUTH_URL}>Login with Instagram</a>
+        </>
       ) : (
         <div>
           <h2>Bem Vindo</h2>
