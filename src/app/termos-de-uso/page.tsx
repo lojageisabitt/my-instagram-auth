@@ -44,8 +44,6 @@ export default function Page() {
         c) aviso de rescisão podem ser encontradas na seção relevante destes Termos.
       </p>
 
-      <p>Importante: Os consumidores residentes na Alemanha têm regras diferentes que lhes são aplicáveis, conforme descrito na secção relevante destes Termos.</p>
-
       <p>
         <strong>TERMOS DE USO</strong>
       </p>
