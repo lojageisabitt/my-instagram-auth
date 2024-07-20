@@ -29,7 +29,7 @@ export default function InstagramAuth2() {
 
   const fetchUserData = async (accessToken: string) => {
     try {
-      const response = await axios.get("/api/get", {
+      const response = await axios.get("/api/getUser", {
         params: { accessToken },
       });
       console.log("resposta", response);
