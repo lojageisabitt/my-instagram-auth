@@ -1,40 +1,22 @@
-import { NextRequest, NextResponse } from 'next/server';
 import axios from 'axios';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const code = searchParams.get('code');
-
-  if (!code) {
-    return NextResponse.json({ error: 'No code provided' }, { status: 400 });
-  }
-
+export async function POST(req: NextRequest) {
   try {
-    // Trocar o código pelo token de acesso
-    const tokenResponse = await axios.post(`https://api.instagram.com/${process.env.INSTAGRAM_API_VERSION}/oauth/IGQWRORzc4T3BKelMyZAUYxTEcxMHhfZAE9mZAnJBaUhFNUlWblVrZADdpcXlVbzkxa3ZAyVXgzZAEo5amxlTWZA1QUFCc25LSG10RVdlVjhDTEU5am9LSkg1Y09kbGJ0WlRTdEdxLVZAfcHhOb0dvaWxWMExWWE54RnJUM0kZD`, null, {
-        params: {
-          client_id: process.env.NEXT_PUBLIC_INSTAGRAM_CLIENT_ID,
-          client_secret: process.env.INSTAGRAM_CLIENT_SECRET,
-          grant_type: 'IGQWRORzc4T3BKelMyZAUYxTEcxMHhfZAE9mZAnJBaUhFNUlWblVrZADdpcXlVbzkxa3ZAyVXgzZAEo5amxlTWZA1QUFCc25LSG10RVdlVjhDTEU5am9LSkg1Y09kbGJ0WlRTdEdxLVZAfcHhOb0dvaWxWMExWWE54RnJUM0kZD',
-          redirect_uri: process.env.NEXT_PUBLIC_INSTAGRAM_REDIRECT_URI,
-          code,
-        },
-      });
+    const { code } = await req.json();
+    console.log('CODE >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', code , '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<,')
 
-    const accessToken = tokenResponse.data.access_token;
-    const userId = tokenResponse.data.user_id;
+    const CLIENT_ID = process.env.NEXT_PUBLIC_INSTAGRAM_CLIENT_ID;
+    const CLIENT_SECRET = process.env.INSTAGRAM_CLIENT_SECRET;
+    const REDIRECT_URI = process.env.NEXT_PUBLIC_INSTAGRAM_REDIRECT_URI;
+    const response = await axios.post(
+      `https://api.instagram.com/oauth/access_token?client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&grant_type=authorization_code&redirect_uri=${REDIRECT_URI}&code=${code}`
+    );
+    console.log('Response >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', response)
 
-    // Obter dados do usuário
-    const userResponse = await axios.get(`https://graph.instagram.com/${process.env.INSTAGRAM_API_VERSION}/${userId}`, {
-        params: {
-          fields: 'id,username,account_type,media_count',
-          access_token: accessToken,
-        },
-      });
-
-    return NextResponse.json(userResponse.data);
-  } catch (error) {
-    console.error('Erro na autenticação do Instagram:', error);
-    return NextResponse.json({ error: 'Erro na autenticação do Instagram' }, { status: 500 });
+    return NextResponse.json({ status: 200, access_token: response.data.access_token });
+  } catch (error: any) {
+    console.error('Erro ao obter o token de acesso:', error);
+    return NextResponse.json({ status: 500, error: 'Erro ao obter o token de acesso' });
   }
 }
