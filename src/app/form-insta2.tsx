@@ -6,22 +6,12 @@ import React, { useEffect, useState } from "react";
 export default function InstagramAuth2() {
   const [userData, setUserData] = useState(null);
   const CLIENT_ID = process.env.NEXT_PUBLIC_INSTAGRAM_CLIENT_ID;
-  const CLIENT_SECRET = process.env.NEXT_PUBLIC_INSTAGRAM_CLIENT_SECRET;
   const REDIRECT_URI = process.env.NEXT_PUBLIC_INSTAGRAM_REDIRECT_URI;
   const AUTH_URL = `https://api.instagram.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&scope=user_profile,user_media&response_type=code`;
 
   const fetchAccessToken = async (code: string) => {
     try {
-      const response = await axios.post(
-        `https://api.instagram.com/oauth/access_token`,
-        new URLSearchParams({
-          client_id: CLIENT_ID!,
-          client_secret: CLIENT_SECRET!,
-          grant_type: "authorization_code",
-          redirect_uri: REDIRECT_URI!,
-          code: code,
-        })
-      );
+      const response = await axios.post("/api/post", { code });
       return response.data.access_token;
     } catch (error) {
       console.error("Erro ao obter o token de acesso:", error);
@@ -31,11 +21,8 @@ export default function InstagramAuth2() {
 
   const fetchUserData = async (accessToken: string) => {
     try {
-      const response = await axios.get(`https://graph.instagram.com/me`, {
-        params: {
-          fields: "id,username,account_type,media_count,profile_picture_url",
-          access_token: accessToken,
-        },
+      const response = await axios.get("/api/get", {
+        params: { accessToken },
       });
       setUserData(response.data);
       console.log(response.data);

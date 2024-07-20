@@ -9,7 +9,6 @@ const nextConfig = {
   async headers() {
     return [
       {
-        // Aplica esses cabeçalhos a todas as rotas da sua aplicação
         source: "/(.*)",
         headers: [
           {
@@ -18,7 +17,7 @@ const nextConfig = {
           },
           {
             key: "Access-Control-Allow-Origin",
-            value: "*", // ou especifique a origem exata, como 'http://localhost:3000'
+            value: "*",
           },
           {
             key: "Access-Control-Allow-Methods",
