@@ -6,7 +6,6 @@ import React, { useEffect, useState } from "react";
 interface UserProfile {
   id: string;
   username: string;
-  profile_pic: string;
 }
 
 export default function InstagramAuth2() {
@@ -66,7 +65,6 @@ export default function InstagramAuth2() {
           <h2>Bem Vindo</h2>
           <p>{userData.id}</p>
           <p>{userData.username}</p>
-          <img src={userData.profile_pic} alt="Profile Picture" />
         </div>
       )}
     </div>
