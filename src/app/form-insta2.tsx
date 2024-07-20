@@ -3,8 +3,14 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
+interface UserProfile {
+  id: string;
+  username: string;
+  profile_picture_url: string;
+}
+
 export default function InstagramAuth2() {
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState<UserProfile | null>(null);
   const [accessToken, setAccessToken] = useState(null);
   const CLIENT_ID = process.env.NEXT_PUBLIC_INSTAGRAM_CLIENT_ID;
   const REDIRECT_URI = process.env.NEXT_PUBLIC_INSTAGRAM_REDIRECT_URI;
@@ -28,7 +34,6 @@ export default function InstagramAuth2() {
         params: { accessToken },
       });
       setUserData(response.data);
-      console.log(response.data);
     } catch (error) {
       console.error("Erro ao obter os dados do usuário:", error);
     }
@@ -54,17 +59,10 @@ export default function InstagramAuth2() {
         <a href={AUTH_URL}>Login with Instagram</a>
       ) : (
         <div>
-          <h2>Welcome</h2>
-          <p>{JSON.stringify(userData)}</p>
-          <img src={"userData!.profile_picture_url"} alt="Profile Picture" />
-        </div>
-      )}
-      <h2>Access Token</h2>
-      {!accessToken ? (
-        <p className="">Espaço reservado para o token de acesso</p>
-      ) : (
-        <div>
-          <h2>{accessToken}</h2>
+          <h2>Bem Vindo</h2>
+          <p>{userData.id}</p>
+          <p>{userData.username}</p>
+          <img src={userData.profile_picture_url} alt="Profile Picture" />
         </div>
       )}
     </div>
