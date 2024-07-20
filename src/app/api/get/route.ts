@@ -19,6 +19,6 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ status: 200, data: response.data });
   } catch (error: any) {
     console.error('Erro ao obter os dados do usuário:', error);
-    return NextResponse.json({ status: 500, error: 'Erro ao obter os dados do usuário' });
+    return NextResponse.json({ status: 500, error: 'Erro ao obter os dados do usuário', errorMessage: error });
   }
 }
