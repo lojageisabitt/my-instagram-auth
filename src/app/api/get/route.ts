@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
   try {
     const response = await axios.get('https://graph.instagram.com/me', {
       params: {
-        fields: 'id,username,account_type,media_count,profile_picture_url',
+        fields: 'id,username,account_type,media_count,profile_pic',
         access_token: accessToken,
       },
     });
