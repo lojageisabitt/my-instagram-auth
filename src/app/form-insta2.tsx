@@ -10,6 +10,7 @@ interface UserProfile {
 
 export default function InstagramAuth2() {
   const [userData, setUserData] = useState<UserProfile | null>(null);
+  const [debugInfo, setDebugInfo] = useState(null);
   const [accessToken, setAccessToken] = useState(null);
   const CLIENT_ID = process.env.NEXT_PUBLIC_INSTAGRAM_CLIENT_ID;
   const REDIRECT_URI = process.env.NEXT_PUBLIC_INSTAGRAM_REDIRECT_URI;
@@ -29,7 +30,7 @@ export default function InstagramAuth2() {
 
   const fetchUserData = async (accessToken: string) => {
     try {
-      const response = await axios.get("/api/getUser", {
+      const response = await axios.get("/api", {
         params: { accessToken },
       });
       console.log("resposta", response);
@@ -37,6 +38,18 @@ export default function InstagramAuth2() {
       return setUserData(response.data.data);
     } catch (error) {
       console.error("Erro ao obter os dados do usuário:", error);
+    }
+  };
+
+  const debugAccessToken = async (accessToken: string) => {
+    try {
+      const response = await axios.get("/api/debugAccessToken", {
+        params: { input_token: accessToken },
+      });
+      setDebugInfo(response.data.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error("Erro ao decodificar o token de acesso:", error);
     }
   };
 
@@ -48,6 +61,7 @@ export default function InstagramAuth2() {
       fetchAccessToken(code).then((accessToken) => {
         if (accessToken) {
           fetchUserData(accessToken);
+          debugAccessToken(accessToken);
         }
       });
     }
@@ -65,6 +79,12 @@ export default function InstagramAuth2() {
           <h2>Bem Vindo</h2>
           <p>{userData.id}</p>
           <p>{userData.username}</p>
+        </div>
+      )}
+      {debugInfo && (
+        <div>
+          <h3>Debug Info</h3>
+          <pre>{JSON.stringify(debugInfo, null, 2)}</pre>
         </div>
       )}
     </div>
