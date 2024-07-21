@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const inputToken = searchParams.get('input_token');
-  const appAccessToken = process.env.FACEBOOK_APP_ACCESS_TOKEN;
+  const appAccessToken = process.env.INSTAGRAM_AUTHORIZATION_CODE;
 
   if (!inputToken) {
     return NextResponse.json({ status: 400, error: 'Input token is required' });
